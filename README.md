@@ -16,7 +16,7 @@
 1. **Clone the Repository:**
 
 ```bash
-git clone https://github.com/<your-username>/double-pendulum-project.git
+git clone https://github.com/aime-n/double-pendulum-mcmc.git
 cd double-pendulum-project
 ```
 
