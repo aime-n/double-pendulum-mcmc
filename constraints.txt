@@ -1,0 +1,2 @@
+# constraints.txt
+python_version >=3.8.17, <3.9

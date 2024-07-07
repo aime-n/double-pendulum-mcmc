@@ -1,0 +1,46 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from double_pendulum import DoublePendulumDataset
+
+# Step 1: Initialize the double pendulum dataset with higher energy initial conditions
+initial_condition = (np.pi / 2, 5.0, np.pi, 5.0)  # Larger initial angles and velocities
+dataset = DoublePendulumDataset(max_time=100, dt=0.01, mass_1=1.0, mass_2=1.0, initial_condition=initial_condition)
+
+# Convert the dataset to a DataFrame
+df = dataset.get_df()
+
+# Extract positions of the pendulum masses
+time = np.arange(0, len(df) * 0.01, 0.01)
+x1 = df['x1'].values
+y1 = df['y1'].values
+
+# Define split point for training and testing data
+split_point = len(df) // 2
+
+# Training data
+time_train = time[:split_point]
+x1_train = x1[:split_point]
+y1_train = y1[:split_point]
+
+# Testing data
+time_test = time[split_point:]
+x1_test = x1[split_point:]
+y1_test = y1[split_point:]
+
+# Step 2: Plot the data
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
+
+# Plot training data
+ax1.plot(time_train, y1_train, 'b-', alpha=0.6)
+ax1.set_xlabel('time')
+ax1.set_ylabel('position')
+ax1.set_title('Training Data')
+
+# Plot testing data
+ax2.plot(time_test, y1_test, 'b-', alpha=0.6)
+ax2.set_xlabel('time')
+ax2.set_ylabel('position')
+ax2.set_title('Testing Data')
+
+plt.tight_layout()
+plt.show()

@@ -1,0 +1,9 @@
+double_pendulum @ git+https://gitlab.com/eijikawasaki/double-pendulum.git@93396aa3e8aa5a646145e6cf6ba53db63c031978
+matplotlib
+numpy
+pandas
+pymc3
+scipy
+torch
+tqdm
+mcmcsampler @ git+https://gitlab.com/eijikawasaki/mcmcsampler.git
