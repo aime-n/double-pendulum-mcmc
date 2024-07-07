@@ -11,6 +11,29 @@ from config.metropolis_helper import *
 from config.pickle_helper import *
 from config.model import DoublePendulumPBNN
 
+def calculate_accuracy(y_true, y_pred, threshold=0.10):
+    """
+    Calculate the percentage of predictions within a certain percentage threshold of the true values.
+    
+    Args:
+        y_true (np.ndarray): True values.
+        y_pred (np.ndarray): Predicted values.
+        threshold (float): Percentage error threshold for correctness.
+        
+    Returns:
+        float: Percentage of correct predictions.
+    """
+    # Calculate the absolute percentage error
+    percentage_error = np.abs((y_pred - y_true) / y_true)
+    
+    # Determine which predictions are within the threshold
+    correct_predictions = percentage_error <= threshold
+    
+    # Calculate the accuracy
+    accuracy = np.mean(correct_predictions) * 100
+    
+    return accuracy
+
 # Load the dataset
 max_time = 20
 dt = 0.02
@@ -31,7 +54,7 @@ model = DoublePendulumPBNN(input_size, hidden_size, output_size)
 model.load_state_dict(torch.load('double_pendulum_pbnn_model.pth'))
 model.eval()
 
-# Prepare data for plotting
+# Prepare data for plotting and accuracy calculation
 true_states = []
 predicted_states = []
 
@@ -43,8 +66,13 @@ with torch.no_grad():
         true_states.append(next_state)
         predicted_states.append(output)
 
-true_states = torch.cat(true_states).numpy()
-predicted_states = torch.cat(predicted_states).numpy()
+true_states = torch.cat(true_states)
+predicted_states = torch.cat(predicted_states)
+
+# Ensure true_states and predicted_states have the same length
+min_length = min(true_states.size(0), predicted_states.size(0))
+true_states = true_states[:min_length].numpy()
+predicted_states = predicted_states[:min_length].numpy()
 
 # Correcting the length of time_steps array
 time_steps = np.arange(0, true_states.shape[0] * dt, dt)
@@ -64,3 +92,7 @@ for i, label in enumerate(['theta1', 'theta2', 'omega1', 'omega2']):
 plt.tight_layout()
 plt.savefig('double_pendulum_predictions.png')
 plt.show()
+
+# Calculate and print accuracy
+accuracy = calculate_accuracy(true_states, predicted_states)
+print(f"Prediction Accuracy: {accuracy:.2f}%")

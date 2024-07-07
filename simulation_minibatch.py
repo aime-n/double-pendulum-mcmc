@@ -21,7 +21,7 @@ train_loader, val_loader = dataset.get_train_test_data_loaders(batch_size=batch_
 initial_state = torch.tensor([0.0, 0.0, 0.0, 0.0], dtype=torch.float32)
 samples = metropolis_hastings(initial_state, train_loader, iterations=10000, save_interval=1000, save_path='samples.pkl')
 
-samples = torch.stack(samples)
+samples = torch.stack(tuple(samples))
 burn_in = 1000
 samples = samples[burn_in:]
 

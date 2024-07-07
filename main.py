@@ -11,7 +11,7 @@ def run_script(script_path):
 def main():
     # Run final_version_smoother.py
     print("Running final_version_smoother.py...")
-    run_script("animation/final_version_smoother.py")
+    run_script("animation/final_trail_smoother.py")
     
     # Run simulation_minibatch.py
     print("Running simulation_minibatch.py...")
